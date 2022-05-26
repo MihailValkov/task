@@ -1,7 +1,25 @@
 <h1>User list</h1>
 
-<ul class="user-list-container">
-  <li *ngFor="let user of users">
-    <app-user-item [user]="user"></app-user-item>
-  </li>
-</ul>
+<table class="user-table">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Address</th>
+      <th>Phone number</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.name}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.address.city}}, {{user.address.street}}, {{user.address.suite}}</td>
+      <td>{{user.phone}}</td>
+      <td class="actions">
+        <a [routerLink]="['/user/detail',user.id]">View</a>
+      </td>
+    </tr>
+  </tbody>
+
+</table>
