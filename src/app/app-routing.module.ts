@@ -13,6 +13,11 @@ const routes: Routes = [
     pathMatch: 'full',
     component: AboutComponent,
   },
+  {
+    path: 'user',
+    loadChildren: () =>
+      import('./user/user.module').then((module) => module.UserModule),
+  },
 ];
 
 export const AppRoutingModule = RouterModule.forRoot(routes);
