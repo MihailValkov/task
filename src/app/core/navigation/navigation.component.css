@@ -1,0 +1,24 @@
+nav {
+  height: 4rem;
+  background-color: #565656;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0px 20px;
+}
+nav ul {
+  display: flex;
+}
+nav ul a {
+  border-bottom: 1px solid transparent;
+  color: white;
+}
+nav ul li a:hover,
+nav ul li button:hover,
+.active {
+  border-bottom: 1px solid white;
+}
+
+nav ul li a span {
+  margin-left: 13px;
+}
