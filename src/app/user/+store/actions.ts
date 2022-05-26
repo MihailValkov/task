@@ -20,3 +20,8 @@ export const loadUsersFailure = createAction(
 export const loadUsersCancel = createAction(
   `${userNamespace} Load Users Cancel`
 );
+
+export const clearUsers = createAction(
+  `${userNamespace} Clear User List`
+);
+
