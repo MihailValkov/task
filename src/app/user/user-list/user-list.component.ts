@@ -1,5 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { IUser } from 'src/app/shared/interfaces/user';
+import { IUserModuleState } from '../+store';
+import { loadUsersStart } from '../+store/actions';
+import {
+  selectErrorMessage,
+  selectIsLoading,
+  selectUserList,
+} from '../+store/selectors';
 import { UserService } from '../user.service';
 
 @Component({
@@ -8,10 +17,14 @@ import { UserService } from '../user.service';
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent implements OnInit {
-  users: IUser[] = [];
-  constructor(private userService: UserService) {}
+  userList$: Observable<IUser[]> = this.store.pipe(select(selectUserList));
+  isLoading$: Observable<boolean> = this.store.pipe(select(selectIsLoading));
+  errorMessage$: Observable<string | null> = this.store.pipe(
+    select(selectErrorMessage)
+  );
+  constructor(private store: Store<IUserModuleState>) {}
 
   ngOnInit(): void {
-    this.userService.loadUsers().subscribe((users) => (this.users = users));
+    this.store.dispatch(loadUsersStart());
   }
 }
