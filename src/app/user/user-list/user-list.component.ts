@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IUser } from 'src/app/shared/interfaces/user';
 import { UserService } from '../user.service';
 
 @Component({
@@ -7,9 +8,10 @@ import { UserService } from '../user.service';
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent implements OnInit {
+  users: IUser[] = [];
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.loadUsers().subscribe((users) => console.log(users));
+    this.userService.loadUsers().subscribe((users) => (this.users = users));
   }
 }
