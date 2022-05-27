@@ -1,9 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Connect } from 'ngrx-action-bundles';
 import { Observable } from 'rxjs';
+import { Connect } from 'ngrx-action-bundles';
 import { IUser } from 'src/app/shared/interfaces/user';
-import { IUserModuleState } from '../+store';
 import { loadUsersBundle } from '../+store/actions';
 import { selectErrorMessage, selectUserList } from '../+store/selectors';
 
@@ -24,21 +22,16 @@ export class UserListComponent implements OnDestroy {
 
   dbSharedResolve = [
     {
-      dispatchRequest: () =>
-        this.store.dispatch(this.actions.creators.loadUsers()),
-      dispatchRequestCancel: () =>
-        this.store.dispatch(this.actions.creators.loadUsersCancel()),
+      dispatchRequest: () => this.actions.dispatch.loadUsers(),
+      dispatchRequestCancel: () => this.actions.dispatch.loadUsersCancel(),
       requestSuccess$: this.actions.listen.loadUsersSuccess$,
       requestFailure$: this.actions.listen.loadUsersFailure$,
     },
   ];
 
-  constructor(
-    private store: Store<IUserModuleState>,
-    private connect: Connect
-  ) {}
+  constructor(private connect: Connect) {}
 
   ngOnDestroy(): void {
-    this.store.dispatch(this.actions.creators.loadUsersClear());
+    this.actions.dispatch.loadUsersClear();
   }
 }

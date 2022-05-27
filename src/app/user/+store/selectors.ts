@@ -1,22 +1,23 @@
 import { createSelector } from '@ngrx/store';
-import { IUserListState } from './reducers';
+import { IUserState } from './reducers';
 
-interface ISelectState {
-  readonly user: IUserListState;
+interface ISelectUserState {
+  readonly user: IUserState;
 }
 
-export const selectUser = (state: ISelectState) => state.user;
+export const selectUserState = (state: ISelectUserState) => state.user;
 
 export const selectCurrentUser = createSelector(
-  selectUser,
+  selectUserState,
   (state) => state.currentUser
 );
+
 export const selectUserList = createSelector(
-  selectUser,
+  selectUserState,
   (state) => state.userList
 );
 
 export const selectErrorMessage = createSelector(
-  selectUser,
+  selectUserState,
   (state) => state.error
 );

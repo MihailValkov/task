@@ -1,5 +1,5 @@
-import { IUser } from 'src/app/shared/interfaces/user';
 import { createAsyncBundleWithClear } from 'ngrx-action-bundles';
+import { IUser } from 'src/app/shared/interfaces/user';
 import { IHttpRequestError } from 'src/app/shared/interfaces/http-error';
 
 const actionNamespace = '[USER]' as const;

@@ -2,20 +2,20 @@ import { createReducer, on } from '@ngrx/store';
 import { IHttpRequestError } from 'src/app/shared/interfaces/http-error';
 import { IUser } from 'src/app/shared/interfaces/user';
 import { loadUserBundle, loadUsersBundle } from './actions';
-export interface IUserListState {
+export interface IUserState {
   userList: IUser[];
   currentUser: IUser | null;
   error: string | null;
 }
 
-const initialUserListState: IUserListState = {
+const initialUserListState: IUserState = {
   userList: [],
   currentUser: null,
   error: null,
 };
 
 const setErrorMessage = (
-  state: IUserListState,
+  state: IUserState,
   {
     payload: {
       error: { message },
@@ -25,7 +25,7 @@ const setErrorMessage = (
   return { ...state, error: message };
 };
 
-export const userListReducer = createReducer<IUserListState>(
+export const userListReducer = createReducer<IUserState>(
   initialUserListState,
   on(loadUsersBundle.creators.loadUsers, (state) => {
     return { ...state, userList: [] };

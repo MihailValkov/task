@@ -1,7 +1,7 @@
 import { Directive, Input, OnDestroy } from '@angular/core';
 
 import { asapScheduler, combineLatest, race, Subject } from 'rxjs';
-import { mapTo, observeOn, takeUntil } from 'rxjs/operators';
+import { map, observeOn, takeUntil } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export interface IResolveBundle<
@@ -42,7 +42,6 @@ export class ResolveDirective implements OnDestroy {
     this.dispatchCancelList = [];
     this.destroySubscriptions.next(null);
 
-    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < bundles.length; i++) {
       const bundle = bundles[i];
       this.errors[i] = false;
@@ -70,8 +69,8 @@ export class ResolveDirective implements OnDestroy {
       }
 
       race(
-        bundle.requestSuccess$.pipe(mapTo(true)),
-        bundle.requestFailure$.pipe(mapTo(false))
+        bundle.requestSuccess$.pipe(map(() => true)),
+        bundle.requestFailure$.pipe(map(() => false))
       )
         .pipe(takeUntil(this.destroySubscriptions))
         .subscribe((result) => {

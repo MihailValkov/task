@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-load-spinner',
   templateUrl: './load-spinner.component.html',
-  styleUrls: ['./load-spinner.component.css']
+  styleUrls: ['./load-spinner.component.css'],
 })
-export class LoadSpinnerComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class LoadSpinnerComponent {}

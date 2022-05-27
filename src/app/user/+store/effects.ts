@@ -18,9 +18,7 @@ export class UserEffects {
           map((users) => this.actions.creators.loadUsersSuccess({ users }))
         )
       ),
-      catchError((error) => {
-        return [this.actions.creators.loadUsersFailure({ error })];
-      })
+      catchError((error) => [this.actions.creators.loadUsersFailure({ error })])
     )
   );
 
@@ -32,9 +30,7 @@ export class UserEffects {
           map((user) => this.actions.creators.loadUserSuccess({ user }))
         )
       ),
-      catchError((error) => {
-        return [this.actions.creators.loadUserFailure({ error })];
-      })
+      catchError((error) => [this.actions.creators.loadUserFailure({ error })])
     )
   );
 

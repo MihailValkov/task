@@ -10,7 +10,6 @@ const routes: Routes = [
   },
   {
     path: 'about',
-    pathMatch: 'full',
     component: AboutComponent,
   },
   {

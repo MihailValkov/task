@@ -13,7 +13,6 @@
     </div>
     <div class="user-information">
       <h2>General Information</h2>
-
       <div class="information-content">
         <p><strong>Username:</strong> {{user.name}}</p>
         <p><strong>Phone:</strong> {{user.phone}}</p>
@@ -22,12 +21,10 @@
         <p><strong>Suite:</strong> {{user.address.suite}}</p>
         <p><strong>Zip code:</strong> {{user.address.zipcode}}</p>
         <p><strong>Company:</strong> {{user.company.name}}</p>
-
       </div>
     </div>
   </ng-container>
 </div>
-
 <ng-container appResolve [dbSharedResolve]="dbSharedResolve" #containerRef="appResolve">
   <app-load-spinner *ngIf="containerRef.isResolving && !(containerRef.hasError)"></app-load-spinner>
   <div class="error" *ngIf="!(containerRef.isResolving) && containerRef.hasError">

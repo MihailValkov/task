@@ -1,10 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Connect } from 'ngrx-action-bundles';
 import { map, Observable } from 'rxjs';
+import { Connect } from 'ngrx-action-bundles';
 import { getCurrentRouteStateParams } from 'src/app/+store/selectors';
 import { IUser } from 'src/app/shared/interfaces/user';
-import { IUserModuleState } from '../+store';
 import { loadUserBundle } from '../+store/actions';
 import { selectCurrentUser, selectErrorMessage } from '../+store/selectors';
 
@@ -18,32 +16,27 @@ export class UserDetailComponent implements OnDestroy {
   selectors = this.connect.connectSelectors({
     user: selectCurrentUser,
     errorMessage: selectErrorMessage,
-    userId: getCurrentRouteStateParams,
+    params: getCurrentRouteStateParams,
   });
 
   user$: Observable<IUser | null> = this.selectors.user$;
   errorMessage$: Observable<string | null> = this.selectors.errorMessage$;
-  userId$ = this.selectors.userId$.pipe(map(({ userId }) => userId));
+  userId$ = this.selectors.params$.pipe(map(({ userId }) => userId));
 
   dbSharedResolve = [
     {
       dispatchRequest: (userId: number) =>
-        this.store.dispatch(this.actions.creators.loadUser({ userId })),
-      dispatchRequestCancel: this.store.dispatch(
-        this.actions.creators.loadUserCancel()
-      ),
+        this.actions.dispatch.loadUser({ userId }),
+      dispatchRequestCancel: this.actions.dispatch.loadUserCancel(),
       requestSuccess$: this.actions.listen.loadUserSuccess$,
       requestFailure$: this.actions.listen.loadUserFailure$,
       dependencies: [this.userId$],
     },
   ];
 
-  constructor(
-    private store: Store<IUserModuleState>,
-    private connect: Connect
-  ) {}
+  constructor(private connect: Connect) {}
 
   ngOnDestroy(): void {
-    this.store.dispatch(this.actions.creators.loadUserClear());
+    this.actions.dispatch.loadUserClear();
   }
 }
