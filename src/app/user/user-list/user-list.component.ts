@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
-import { Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IUser } from 'src/app/shared/interfaces/user';
 import { IUserModuleState } from '../+store';
 import {
@@ -28,7 +28,6 @@ export class UserListComponent {
       dispatchRequestCancel: () => this.store.dispatch(loadUsersCancel()),
       requestSuccess$: this.actions$.pipe(ofType(loadUsersSuccess)),
       requestFailure$: this.actions$.pipe(ofType(loadUsersFailure)),
-      dependencies: [this.userList$.pipe(take(1))],
     },
   ];
 

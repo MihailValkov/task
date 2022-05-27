@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ofType, Actions } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
-import { map, Observable, take } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { getCurrentRouteStateParams } from 'src/app/+store/selectors';
 import { IUser } from 'src/app/shared/interfaces/user';
 import { IUserModuleState } from '../+store';
