@@ -22,10 +22,6 @@ export const loadUsersCancel = createAction(
   `${userNamespace} Load Users Cancel`
 );
 
-export const clearUsers = createAction(
-  `${userNamespace} Clear User List`
-);
-
 // Load current user by provided userId
 
 export const loadUserStart = createAction(
@@ -47,6 +43,3 @@ export const loadUserCancel = createAction(
   `${userNamespace} Load User Cancel`
 );
 
-export const clearUser = createAction(
-  `${userNamespace} Clear Current User`
-);

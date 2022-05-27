@@ -1,6 +1,4 @@
-
 <div class="user-detail-container">
-  <app-load-spinner *ngIf="(isLoading$|async) && !(errorMessage$|async)"></app-load-spinner>
   <ng-container *ngIf="(user$|async) as user">
     <div class="user-card">
       <div class="card-header">
@@ -28,7 +26,11 @@
       </div>
     </div>
   </ng-container>
-  <div class="error" *ngIf="!(isLoading$|async) && (errorMessage$|async)">
-    {{(errorMessage$|async)}}
-  </div>
 </div>
+
+<ng-container appResolve [dbSharedResolve]="dbSharedResolve" #containerRef="appResolve">
+  <app-load-spinner *ngIf="containerRef.isResolving && !(containerRef.hasError)"></app-load-spinner>
+  <div class="error" *ngIf="!(containerRef.isResolving) && containerRef.hasError">
+    {{( errorMessage$ | async )}}
+  </div>
+</ng-container>

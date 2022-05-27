@@ -22,3 +22,6 @@
 .actions {
   text-align: center;
 }
+.actions a:hover {
+  text-decoration: underline;
+}

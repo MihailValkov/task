@@ -48,6 +48,7 @@
 }
 .user-information h2 {
   margin-top: 0;
+  border-bottom: 1px solid #ccc;
 }
 
 .information-content p {

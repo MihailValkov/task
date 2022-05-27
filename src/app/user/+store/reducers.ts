@@ -27,6 +27,8 @@ const setErrorMessage = (
 
 const startFetching = (state: IUserState) => ({
   ...state,
+  currentUser: null,
+  userList: [],
   isLoading: true,
   errorMessage: null,
 });
@@ -38,7 +40,7 @@ export const userReducer = createReducer<IUserState>(
     return { ...state, userList: users, isLoading: false };
   }),
   on(userActions.loadUsersFailure, setErrorMessage),
-  on(userActions.clearUsers, (state) => {
+  on(userActions.loadUsersCancel, (state) => {
     return { ...state, userList: [] };
   }),
   on(userActions.loadUserStart, startFetching),
@@ -46,7 +48,7 @@ export const userReducer = createReducer<IUserState>(
     return { ...state, currentUser: user, isLoading: false };
   }),
   on(userActions.loadUserFailure, setErrorMessage),
-  on(userActions.clearUser, (state) => {
+  on(userActions.loadUserCancel, (state) => {
     return { ...state, currentUser: null };
   })
 );

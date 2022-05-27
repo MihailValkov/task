@@ -1,5 +1,5 @@
 <h1>User list</h1>
-<app-load-spinner *ngIf="(isLoading$|async) && !(errorMessage$|async)"></app-load-spinner>
+
 <table class="user-table" *ngIf="(userList$|async)?.length !== 0">
   <thead>
     <tr>
@@ -7,7 +7,7 @@
       <th>Email</th>
       <th>Address</th>
       <th>Phone number</th>
-      <th>Actions</th>
+      <th class="actions">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -22,11 +22,10 @@
     </tr>
   </tbody>
 </table>
-<div class="error" *ngIf="!(isLoading$|async) && (errorMessage$|async)">
-  {{(errorMessage$|async)}}
-</div>
 
-<!-- <div #divRef="appResolve" appResolve>
-  {{divRef.isResolving}}
-</div> -->
-
+<ng-container appResolve [dbSharedResolve]="dbSharedResolve" #containerRef="appResolve">
+  <app-load-spinner *ngIf="containerRef.isResolving && !(containerRef.hasError)"></app-load-spinner>
+  <div class="error" *ngIf="!(containerRef.isResolving) && containerRef.hasError">
+    {{( errorMessage$ | async )}}
+  </div>
+</ng-container>
