@@ -40,5 +40,13 @@ export const userReducer = createReducer<IUserState>(
   on(userActions.loadUsersFailure, setErrorMessage),
   on(userActions.clearUsers, (state) => {
     return { ...state, userList: [] };
+  }),
+  on(userActions.loadUserStart, startFetching),
+  on(userActions.loadUserSuccess, (state, { user }) => {
+    return { ...state, currentUser: user, isLoading: false };
+  }),
+  on(userActions.loadUserFailure, setErrorMessage),
+  on(userActions.clearUser, (state) => {
+    return { ...state, currentUser: null };
   })
 );

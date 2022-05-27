@@ -21,5 +21,20 @@ export class UserEffects {
     )
   );
 
+  loadCurrentUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(userActions.loadUserStart),
+      switchMap(({ userId }) =>
+        this.userService.loadUserById(userId).pipe(
+          takeUntil(this.actions$.pipe(ofType(userActions.loadUserCancel))),
+          map((user) => userActions.loadUserSuccess({ user }))
+        )
+      ),
+      catchError((err) => {
+        return [userActions.loadUserFailure({ message: err.message })];
+      })
+    )
+  );
+
   constructor(private userService: UserService, private actions$: Actions) {}
 }

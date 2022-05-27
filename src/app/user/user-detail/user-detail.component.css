@@ -60,3 +60,8 @@
   display: block;
   width: 100px;
 }
+
+.error {
+  font-weight: bold;
+  color: red;
+}
