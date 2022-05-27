@@ -12,14 +12,14 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-
+import { SharedModule } from './shared/shared.module';
 @NgModule({
   declarations: [AppComponent, HomeComponent, AboutComponent],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
     CoreModule,
+    BrowserModule,
     HttpClientModule,
+    AppRoutingModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot(),

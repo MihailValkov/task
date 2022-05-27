@@ -25,3 +25,11 @@
 <div class="error" *ngIf="!(isLoading$|async) && (errorMessage$|async)">
   {{(errorMessage$|async)}}
 </div>
+
+<div #divRef="appResolve" appResolve>
+  {{divRef.isResolving}}
+</div>
+
+<div appResolve="test">
+
+</div>
