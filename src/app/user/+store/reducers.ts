@@ -1,54 +1,56 @@
 import { createReducer, on } from '@ngrx/store';
+import { IHttpRequestError } from 'src/app/shared/interfaces/http-error';
 import { IUser } from 'src/app/shared/interfaces/user';
-import * as userActions from './actions';
-
-export interface IUserState {
-  currentUser: IUser | null;
+import { loadUserBundle, loadUsersBundle } from './actions';
+export interface IUserListState {
   userList: IUser[];
-  isLoading: boolean;
-  errorMessage: string | null;
+  currentUser: IUser | null;
+  error: string | null;
 }
 
-const initialUserState: IUserState = {
-  currentUser: null,
+const initialUserListState: IUserListState = {
   userList: [],
-  isLoading: false,
-  errorMessage: null,
+  currentUser: null,
+  error: null,
 };
 
 const setErrorMessage = (
-  state: IUserState,
-  { message }: { message: string }
-) => ({
-  ...state,
-  errorMessage: message,
-  isLoading: false,
-});
+  state: IUserListState,
+  {
+    payload: {
+      error: { message },
+    },
+  }: { payload: IHttpRequestError }
+) => {
+  return { ...state, error: message };
+};
 
-const startFetching = (state: IUserState) => ({
-  ...state,
-  currentUser: null,
-  userList: [],
-  isLoading: true,
-  errorMessage: null,
-});
-
-export const userReducer = createReducer<IUserState>(
-  initialUserState,
-  on(userActions.loadUsersStart, startFetching),
-  on(userActions.loadUsersSuccess, (state, { users }) => {
-    return { ...state, userList: users, isLoading: false };
-  }),
-  on(userActions.loadUsersFailure, setErrorMessage),
-  on(userActions.loadUsersCancel, (state) => {
+export const userListReducer = createReducer<IUserListState>(
+  initialUserListState,
+  on(loadUsersBundle.creators.loadUsers, (state) => {
     return { ...state, userList: [] };
   }),
-  on(userActions.loadUserStart, startFetching),
-  on(userActions.loadUserSuccess, (state, { user }) => {
-    return { ...state, currentUser: user, isLoading: false };
+  on(
+    loadUsersBundle.creators.loadUsersSuccess,
+    (state, { payload: { users } }) => {
+      return { ...state, userList: users };
+    }
+  ),
+  on(loadUsersBundle.creators.loadUsersFailure, setErrorMessage),
+  on(loadUsersBundle.creators.loadUsersClear, (state) => {
+    return { ...state, userList: [] };
   }),
-  on(userActions.loadUserFailure, setErrorMessage),
-  on(userActions.loadUserCancel, (state) => {
+  on(loadUserBundle.creators.loadUser, (state) => {
+    return { ...state, currentUser: null };
+  }),
+  on(
+    loadUserBundle.creators.loadUserSuccess,
+    (state, { payload: { user } }) => {
+      return { ...state, currentUser: user };
+    }
+  ),
+  on(loadUserBundle.creators.loadUserFailure, setErrorMessage),
+  on(loadUserBundle.creators.loadUserClear, (state) => {
     return { ...state, currentUser: null };
   })
 );

@@ -1,40 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { createEffect } from '@ngrx/effects';
 import { catchError, map, switchMap, takeUntil } from 'rxjs';
+import { Connect } from 'ngrx-action-bundles';
+
 import { UserService } from '../user.service';
-import * as userActions from './actions';
+import { loadUsersBundle, loadUserBundle } from './actions';
 
 @Injectable()
 export class UserEffects {
+  actions = this.connect.connectBundles([loadUsersBundle, loadUserBundle]);
+
   loadUsers$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(userActions.loadUsersStart),
+    this.actions.listen.loadUsers$.pipe(
       switchMap(() =>
         this.userService.loadUsers().pipe(
-          takeUntil(this.actions$.pipe(ofType(userActions.loadUsersCancel))),
-          map((users) => userActions.loadUsersSuccess({ users }))
+          takeUntil(this.actions.listen.loadUsersCancel$),
+          map((users) => this.actions.creators.loadUsersSuccess({ users }))
         )
       ),
-      catchError((err) => {
-        return [userActions.loadUsersFailure({ message: err.message })];
+      catchError((error) => {
+        return [this.actions.creators.loadUsersFailure({ error })];
       })
     )
   );
 
-  loadCurrentUser$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(userActions.loadUserStart),
-      switchMap(({ userId }) =>
+  loadUser$ = createEffect(() =>
+    this.actions.listen.loadUser$.pipe(
+      switchMap(({ payload: { userId } }) =>
         this.userService.loadUserById(userId).pipe(
-          takeUntil(this.actions$.pipe(ofType(userActions.loadUserCancel))),
-          map((user) => userActions.loadUserSuccess({ user }))
+          takeUntil(this.actions.listen.loadUserCancel$),
+          map((user) => this.actions.creators.loadUserSuccess({ user }))
         )
       ),
-      catchError((err) => {
-        return [userActions.loadUserFailure({ message: err.message })];
+      catchError((error) => {
+        return [this.actions.creators.loadUserFailure({ error })];
       })
     )
   );
 
-  constructor(private userService: UserService, private actions$: Actions) {}
+  constructor(private userService: UserService, private connect: Connect) {}
 }

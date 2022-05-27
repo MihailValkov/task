@@ -1,45 +1,17 @@
-import { createAction, props } from '@ngrx/store';
 import { IUser } from 'src/app/shared/interfaces/user';
+import { createAsyncBundleWithClear } from 'ngrx-action-bundles';
+import { IHttpRequestError } from 'src/app/shared/interfaces/http-error';
 
-const userNamespace = '[USER]';
+const actionNamespace = '[USER]' as const;
+const loadUserActionName = 'loadUser' as const;
+const loadUsersActionName = 'loadUsers' as const;
 
-// Load all users
-export const loadUsersStart = createAction(
-  `${userNamespace} Load Users Start`
-);
+export const loadUsersBundle = createAsyncBundleWithClear(
+  loadUsersActionName,
+  actionNamespace
+)<void, { users: IUser[] }, IHttpRequestError, void, void>();
 
-export const loadUsersSuccess = createAction(
-  `${userNamespace} Load Users Success`,
-  props<{ users: IUser[] }>()
-);
-
-export const loadUsersFailure = createAction(
-  `${userNamespace} Load Users Failure`,
-  props<{ message: string }>()
-);
-
-export const loadUsersCancel = createAction(
-  `${userNamespace} Load Users Cancel`
-);
-
-// Load current user by provided userId
-
-export const loadUserStart = createAction(
-  `${userNamespace} Load User Start`,
-  props<{ userId: number }>()
-);
-
-export const loadUserSuccess = createAction(
-  `${userNamespace} Load User Success`,
-  props<{ user: IUser }>()
-);
-
-export const loadUserFailure = createAction(
-  `${userNamespace} Load User Failure`,
-  props<{ message: string }>()
-);
-
-export const loadUserCancel = createAction(
-  `${userNamespace} Load User Cancel`
-);
-
+export const loadUserBundle = createAsyncBundleWithClear(
+  loadUserActionName,
+  actionNamespace
+)<{ userId: number }, { user: IUser }, IHttpRequestError, void, void>();

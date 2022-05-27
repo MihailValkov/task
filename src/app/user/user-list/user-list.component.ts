@@ -1,15 +1,10 @@
-import { Component } from '@angular/core';
-import { Actions, ofType } from '@ngrx/effects';
-import { select, Store } from '@ngrx/store';
+import { Component, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Connect } from 'ngrx-action-bundles';
 import { Observable } from 'rxjs';
 import { IUser } from 'src/app/shared/interfaces/user';
 import { IUserModuleState } from '../+store';
-import {
-  loadUsersCancel,
-  loadUsersFailure,
-  loadUsersStart,
-  loadUsersSuccess,
-} from '../+store/actions';
+import { loadUsersBundle } from '../+store/actions';
 import { selectErrorMessage, selectUserList } from '../+store/selectors';
 
 @Component({
@@ -17,22 +12,33 @@ import { selectErrorMessage, selectUserList } from '../+store/selectors';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
 })
-export class UserListComponent {
-  userList$: Observable<IUser[]> = this.store.pipe(select(selectUserList));
-  errorMessage$: Observable<string | null> = this.store.pipe(
-    select(selectErrorMessage)
-  );
+export class UserListComponent implements OnDestroy {
+  actions = this.connect.connectBundles([loadUsersBundle]);
+  selectors = this.connect.connectSelectors({
+    userList: selectUserList,
+    errorMessage: selectErrorMessage,
+  });
+
+  userList$: Observable<IUser[]> = this.selectors.userList$;
+  errorMessage$: Observable<string | null> = this.selectors.errorMessage$;
+
   dbSharedResolve = [
     {
-      dispatchRequest: () => this.store.dispatch(loadUsersStart()),
-      dispatchRequestCancel: () => this.store.dispatch(loadUsersCancel()),
-      requestSuccess$: this.actions$.pipe(ofType(loadUsersSuccess)),
-      requestFailure$: this.actions$.pipe(ofType(loadUsersFailure)),
+      dispatchRequest: () =>
+        this.store.dispatch(this.actions.creators.loadUsers()),
+      dispatchRequestCancel: () =>
+        this.store.dispatch(this.actions.creators.loadUsersCancel()),
+      requestSuccess$: this.actions.listen.loadUsersSuccess$,
+      requestFailure$: this.actions.listen.loadUsersFailure$,
     },
   ];
 
   constructor(
     private store: Store<IUserModuleState>,
-    private actions$: Actions
+    private connect: Connect
   ) {}
+
+  ngOnDestroy(): void {
+    this.store.dispatch(this.actions.creators.loadUsersClear());
+  }
 }
