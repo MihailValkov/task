@@ -9,10 +9,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  RouterStateSerializer,
+  StoreRouterConnectingModule,
+} from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { SharedModule } from './shared/shared.module';
+import { RouteSerializer } from './+store/route-serializer';
+import { reducers } from './+store';
+
 @NgModule({
   declarations: [AppComponent, HomeComponent, AboutComponent],
   imports: [
@@ -20,9 +25,9 @@ import { SharedModule } from './shared/shared.module';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(reducers),
     EffectsModule.forRoot([]),
-    StoreRouterConnectingModule.forRoot(),
+    StoreRouterConnectingModule.forRoot({ serializer: RouteSerializer }),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
   ],
   providers: [],

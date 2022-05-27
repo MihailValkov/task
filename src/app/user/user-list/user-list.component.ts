@@ -28,12 +28,13 @@ export class UserListComponent implements OnInit, OnDestroy {
       dispatchRequest: loadUsersStart,
     },
   ];
+  
   constructor(private store: Store<IUserModuleState>) {}
 
   ngOnInit(): void {
-    // this.store.dispatch(loadUsersStart());
+    this.store.dispatch(loadUsersStart());
   }
   ngOnDestroy(): void {
-    // this.store.dispatch(clearUsers());
+    this.store.dispatch(clearUsers());
   }
 }
