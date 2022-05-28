@@ -21,13 +21,15 @@ export class UserDetailComponent implements OnDestroy {
 
   user$: Observable<IUser | null> = this.selectors.user$;
   errorMessage$: Observable<string | null> = this.selectors.errorMessage$;
-  userId$ = this.selectors.params$.pipe(map(({ userId }) => userId));
+  userId$: Observable<number> = this.selectors.params$.pipe(
+    map(({ userId }) => userId)
+  );
 
   dbSharedResolve = [
     {
       dispatchRequest: (userId: number) =>
         this.actions.dispatch.loadUser({ userId }),
-      dispatchRequestCancel: this.actions.dispatch.loadUserCancel(),
+      dispatchRequestCancel: () => this.actions.dispatch.loadUserCancel(),
       requestSuccess$: this.actions.listen.loadUserSuccess$,
       requestFailure$: this.actions.listen.loadUserFailure$,
       dependencies: [this.userId$],
